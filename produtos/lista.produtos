@@ -1,0 +1,71 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ 'Editar' if produto else 'Novo' }} Produto — MiniStore
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'Editar' if produto else 'Novo' }} Produto</h1>
+</div>
+
+{% if produto %}
+<form action="{{ url_for('produtos.editar', id=produto.id) }}" method="POST">
+{% else %}
+<form action="{{ url_for('produtos.novo') }}" method="POST">
+{% endif %}
+
+    <div class="form-group">
+        <label for="nome">Nome do Produto *</label>
+        <input type="text" id="nome" name="nome"
+               class="form-control"
+               value="{{ produto.nome if produto else '' }}"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="categoria">Categoria</label>
+        <input type="text" id="categoria" name="categoria"
+               class="form-control"
+               value="{{ produto.categoria|default('') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="preco">Preço</label>
+        <input type="number" id="preco" name="preco"
+               class="form-control"
+               step="0.01"
+               min="0"
+               value="{{ produto.preco|default('') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="estoque">Estoque</label>
+        <input type="number" id="estoque" name="estoque"
+               class="form-control"
+               min="0"
+               value="{{ produto.estoque|default('') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao"
+                  class="form-control"
+                  rows="4">{{ produto.descricao|default('') }}</textarea>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            {{ 'Salvar' if produto else 'Cadastrar' }}
+        </button>
+
+        <a href="{{ url_for('produtos.listar') }}"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+    </div>
+
+</form>
+{% endblock %}
+```
