@@ -11,6 +11,7 @@ def listar():
     conn = None
     cursor = None
     produtos = []
+    
 
     try:
         conn = get_connection()
@@ -26,7 +27,7 @@ def listar():
             cursor.close()
         if conn:
             conn.close()
-
+    print("################### aqui")
     return render_template('lista_produto.html', produto=produtos)
 
 
@@ -65,7 +66,32 @@ def novo():
             if conn:
                 conn.close()
 
-    return render_template('form_produto.html', produto=None)
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+
+        sql = '''
+            SELECT 
+                id,
+                nome
+            FROM    
+                categorias
+        '''
+        cursor.execute(sql)
+        categorias = cursor.fetchall()
+
+    except mysql.connector.Error as e:
+        flash(f'Erro ao buscar categoria: {e}', 'danger')
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    
+
+    return render_template('form_produto.html', produto=None, categorias=categorias)
 
 
 @produtos_bp.route('/produtos/<int:id>/editar', methods=['GET', 'POST'])
