@@ -9,6 +9,7 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
+# Criar banco de dados
 cursor.execute("""
     CREATE DATABASE IF NOT EXISTS ministore
     CHARACTER SET utf8mb4
@@ -17,6 +18,8 @@ cursor.execute("""
 
 cursor.execute("USE ministore")
 
+
+# Tabela clientes
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS clientes (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,6 +31,8 @@ cursor.execute("""
     )
 """)
 
+
+# Tabela categorias
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS categorias (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,6 +41,8 @@ cursor.execute("""
     )
 """)
 
+
+# Tabela produtos
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS produtos (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,10 +51,13 @@ cursor.execute("""
         descricao TEXT,
         preco DECIMAL(10,2) NOT NULL,
         id_categoria INT,
+        estoque INT NOT NULL DEFAULT 0,
         FOREIGN KEY (id_categoria) REFERENCES categorias(id)
     )
 """)
 
+
+# Tabela vendas
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS vendas (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,6 +68,8 @@ cursor.execute("""
     )
 """)
 
+
+# Tabela itens_venda
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS itens_venda (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -70,14 +82,19 @@ cursor.execute("""
     )
 """)
 
+
+# Criar usuário do sistema
 cursor.execute("""
     CREATE USER IF NOT EXISTS 'ministore'@'localhost'
     IDENTIFIED BY '123mudar'
 """)
 
+
+# Dar permissões
 cursor.execute("""
     GRANT ALL PRIVILEGES ON ministore.* TO 'ministore'@'localhost'
 """)
+
 
 cursor.execute("FLUSH PRIVILEGES")
 

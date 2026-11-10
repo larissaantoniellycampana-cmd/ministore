@@ -37,7 +37,6 @@ def novo():
         nome = request.form['nome']
         categoria = request.form.get('categoria', '')
         preco = request.form.get('preco') or 0
-        estoque = request.form.get('estoque') or 0
         descricao = request.form.get('descricao', '')
 
         conn = None
@@ -48,10 +47,9 @@ def novo():
             cursor = conn.cursor()
 
             sql = '''INSERT INTO produtos
-                     (nome, categoria, preco, estoque, descricao)
+                     (codigo, nome, descricao, preco, id_categoria)
                      VALUES (%s, %s, %s, %s, %s)'''
-
-            cursor.execute(sql, (nome, categoria, preco, estoque, descricao))
+            cursor.execute(sql, (codigo, nome, descricao, preco, id_categoria))
             conn.commit()
 
             flash('Produto cadastrado com sucesso!', 'success')
